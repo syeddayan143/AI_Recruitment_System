@@ -1,0 +1,553 @@
+﻿@model IEnumerable<AIRecruitmentSystem.Models.JobApplication>
+
+@{
+    ViewData["Title"] = "My Applications";
+}
+
+<style>
+    .applications-page {
+        padding: 30px 0 50px;
+        color: #f3f4f6;
+    }
+
+    .applications-heading {
+        margin-bottom: 25px;
+    }
+
+        .applications-heading h2 {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .applications-heading p {
+            color: #9ca3af;
+        }
+
+    .application-item {
+        background: #171b24;
+        border: 1px solid #303746;
+        border-radius: 15px;
+        padding: 22px;
+        margin-bottom: 18px;
+    }
+
+    .job-title {
+        color: #f9fafb;
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .job-meta {
+        color: #9ca3af;
+        font-size: 14px;
+        margin-bottom: 7px;
+        overflow-wrap: anywhere;
+    }
+
+    .status {
+        display: inline-block;
+        padding: 7px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 700;
+        background: #26364f;
+        color: #b7d0ff;
+    }
+
+    .status-shortlisted,
+    .status-hired {
+        background: #173d2b;
+        color: #86efac;
+    }
+
+    .status-rejected {
+        background: #47272b;
+        color: #fca5a5;
+    }
+
+    .status-under-review {
+        background: #45351b;
+        color: #fcd34d;
+    }
+
+    .status-interview {
+        background: #26364f;
+        color: #bfdbfe;
+    }
+
+    .application-message {
+        color: #d1d5db;
+        margin-top: 15px;
+        margin-bottom: 0;
+    }
+
+    .empty-applications {
+        background: #171b24;
+        border: 1px solid #303746;
+        border-radius: 15px;
+        padding: 40px 20px;
+        text-align: center;
+    }
+
+        .empty-applications p {
+            color: #9ca3af;
+        }
+
+    .applications-page .btn {
+        border-radius: 9px;
+        padding: 10px 15px;
+    }
+
+    .interview-section {
+        margin-top: 22px;
+        padding: 18px;
+        background: #11151d;
+        border: 1px solid #374151;
+        border-radius: 12px;
+    }
+
+    .interview-heading {
+        color: #f9fafb;
+        font-size: 17px;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+
+    .interview-card {
+        padding: 15px;
+        margin-bottom: 12px;
+        background: #1b2230;
+        border: 1px solid #374151;
+        border-radius: 10px;
+    }
+
+        .interview-card:last-child {
+            margin-bottom: 0;
+        }
+
+    .interview-status,
+    .response-badge {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 20px;
+        background: #26364f;
+        color: #bfdbfe;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .response-confirmed {
+        background: #173d2b;
+        color: #86efac;
+    }
+
+    .response-declined {
+        background: #47272b;
+        color: #fca5a5;
+    }
+
+    .response-pending {
+        background: #45351b;
+        color: #fcd34d;
+    }
+
+    .interview-link {
+        display: inline-block;
+        margin-top: 8px;
+        color: #93c5fd;
+        overflow-wrap: anywhere;
+    }
+
+    .interview-feedback {
+        margin-top: 12px;
+        padding: 12px;
+        background: #171b24;
+        border-radius: 8px;
+        color: #d1d5db;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+    }
+
+    .interview-empty {
+        color: #9ca3af;
+        margin: 0;
+    }
+
+    .interview-response-actions {
+        margin-top: 15px;
+        padding-top: 14px;
+        border-top: 1px solid #374151;
+    }
+
+        .interview-response-actions p {
+            color: #d1d5db;
+            margin-bottom: 10px;
+        }
+
+    .response-time {
+        color: #9ca3af;
+        font-size: 12px;
+        margin-top: 8px;
+    }
+
+    .applications-alert {
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin-bottom: 18px;
+    }
+
+    .applications-page .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    @@media (max-width: 576px) {
+        .applications-page {
+            padding-top: 20px;
+        }
+
+        .applications-heading h2 {
+            font-size: 24px;
+        }
+
+        .application-item {
+            padding: 17px;
+        }
+
+        .interview-section {
+            padding: 13px;
+        }
+
+        .interview-response-actions .btn {
+            width: 100%;
+            margin-bottom: 8px;
+        }
+    }
+</style>
+
+<div class="container applications-page">
+
+    <div class="applications-heading">
+        <h2>My Applications</h2>
+        <p>
+            Track your job applications and check the latest status
+            of each application.
+        </p>
+    </div>
+
+    @if (TempData["InterviewResponseSuccess"] != null)
+    {
+        <div class="alert alert-success applications-alert" role="alert">
+            @TempData["InterviewResponseSuccess"]
+        </div>
+    }
+
+    @if (TempData["InterviewResponseError"] != null)
+    {
+        <div class="alert alert-danger applications-alert" role="alert">
+            @TempData["InterviewResponseError"]
+        </div>
+    }
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="mb-3 text-secondary">
+            Total Applications: @Model.Count()
+        </div>
+
+        @foreach (var application in Model)
+        {
+            var status = application.Status ?? "Applied";
+
+            var statusClass = status switch
+            {
+                "Shortlisted" => "status-shortlisted",
+                "Hired" => "status-hired",
+                "Rejected" => "status-rejected",
+                "Under Review" => "status-under-review",
+                "Interview Scheduled" => "status-interview",
+                _ => ""
+            };
+
+            var interviews = application.Interviews?
+            .OrderByDescending(i => i.ScheduledAt)
+            .ToList()
+            ?? new List<AIRecruitmentSystem.Models.Interview>();
+
+            <div class="application-item">
+
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+                    <div>
+                        <h3 class="job-title">
+                            @(application.Job?.Title ?? "Job details unavailable")
+                        </h3>
+
+                        <div class="job-meta">
+                            <i class="bi bi-building"></i>
+                            @(application.Job?.Department ?? "Department not specified")
+                        </div>
+
+                        <div class="job-meta">
+                            <i class="bi bi-geo-alt"></i>
+                            @(application.Job?.Location ?? "Location not specified")
+                        </div>
+
+                        <div class="job-meta">
+                            <i class="bi bi-calendar3"></i>
+                            Applied on:
+                            @(application.AppliedAt.ToLocalTime().ToString("dd MMM yyyy"))
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="status @statusClass">
+                            @status
+                        </span>
+                    </div>
+                </div>
+
+                @if (status == "Applied")
+                {
+                    <p class="application-message">
+                        Your application has been submitted successfully.
+                    </p>
+                }
+                else if (status == "Under Review")
+                {
+                    <p class="application-message">
+                        Your application is being reviewed by the recruiter.
+                    </p>
+                }
+                else if (status == "Shortlisted")
+                {
+                    <p class="application-message">
+                        Congratulations! You have been shortlisted.
+                        Please watch for further communication from the recruiter.
+                    </p>
+                }
+                else if (status == "Interview Scheduled")
+                {
+                    <p class="application-message">
+                        An interview has been scheduled for your application.
+                        Check the interview details below.
+                    </p>
+                }
+                else if (status == "Rejected")
+                {
+                    <p class="application-message">
+                        Unfortunately, your application was not selected
+                        for this position.
+                    </p>
+                }
+                else if (status == "Hired")
+                {
+                    <p class="application-message">
+                        Congratulations! Your application has been marked
+                        as hired by the recruiter.
+                    </p>
+                }
+                else
+                {
+                    <p class="application-message">
+                        Your application status has been updated.
+                    </p>
+                }
+
+                @if (application.MatchScore.HasValue)
+                {
+                    <div class="job-meta mt-3">
+                        Resume Match:
+                        <strong>
+                            @application.MatchScore.Value.ToString("0.##")%
+                        </strong>
+                    </div>
+                }
+
+                <div class="interview-section">
+                    <h4 class="interview-heading">
+                        <i class="bi bi-camera-video"></i>
+                        Interview Details
+                    </h4>
+
+                    @if (interviews.Any())
+                    {
+                        @foreach (var interview in interviews)
+                        {
+                            var response = interview.CandidateResponse ?? "Pending";
+
+                            var responseClass = response switch
+                            {
+                                "Confirmed" => "response-confirmed",
+                                "Declined" => "response-declined",
+                                _ => "response-pending"
+                            };
+
+                            <div class="interview-card">
+
+                                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                                    <div>
+                                        <div class="job-meta">
+                                            <i class="bi bi-calendar-event"></i>
+                                            <strong>Interview Date &amp; Time:</strong>
+                                            @(interview.ScheduledAt.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt"))
+                                        </div>
+
+                                        <div class="job-meta">
+                                            <i class="bi bi-person-video3"></i>
+                                            <strong>Interview Type:</strong>
+                                            @interview.InterviewType
+                                        </div>
+                                    </div>
+
+                                    <span class="interview-status">
+                                        @interview.Status
+                                    </span>
+                                </div>
+
+                                @if (!string.IsNullOrWhiteSpace(interview.MeetingLink)
+                                                && Uri.TryCreate(
+                                                interview.MeetingLink,
+                                                UriKind.Absolute,
+                                                out var meetingUri)
+                                                && (meetingUri.Scheme == Uri.UriSchemeHttps
+                                                || meetingUri.Scheme == Uri.UriSchemeHttp))
+                                {
+                                    <a class="interview-link"
+                                       href="@meetingUri.AbsoluteUri"
+                                       target="_blank"
+                                       rel="noopener noreferrer">
+                                        <i class="bi bi-camera-video"></i>
+                                        Join / Open Meeting Link
+                                    </a>
+                                }
+
+                                <div class="interview-response-actions">
+                                    <p>
+                                        <strong>Your Response:</strong>
+                                        <span class="response-badge @responseClass">
+                                            @response
+                                        </span>
+                                    </p>
+
+                                    @if (string.Equals(
+                                                        response,
+                                                        "Pending",
+                                                        StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <p>
+                                            Please confirm whether you can attend
+                                            this interview.
+                                        </p>
+
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <form asp-controller="CandidateApplications"
+                                                  asp-action="RespondToInterview"
+                                                  method="post">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden"
+                                                       name="interviewId"
+                                                       value="@interview.Id" />
+                                                <input type="hidden"
+                                                       name="response"
+                                                       value="Confirmed" />
+
+                                                <button type="submit"
+                                                        class="btn btn-success">
+                                                    <i class="bi bi-check-circle"></i>
+                                                    Confirm Interview
+                                                </button>
+                                            </form>
+
+                                            <form asp-controller="CandidateApplications"
+                                                  asp-action="RespondToInterview"
+                                                  method="post">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden"
+                                                       name="interviewId"
+                                                       value="@interview.Id" />
+                                                <input type="hidden"
+                                                       name="response"
+                                                       value="Declined" />
+
+                                                <button type="submit"
+                                                        class="btn btn-outline-danger">
+                                                    <i class="bi bi-x-circle"></i>
+                                                    Decline Interview
+                                                </button>
+                                            </form>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <p class="mb-0">
+                                            @if (response == "Confirmed")
+                                            {
+                                                <span>You have confirmed your attendance.</span>
+                                            }
+                                            else if (response == "Declined")
+                                            {
+                                                <span>You have declined this interview.</span>
+                                            }
+                                        </p>
+
+                                        @if (interview.CandidateRespondedAt.HasValue)
+                                        {
+                                            <div class="response-time">
+                                                Response submitted:
+                                                @(interview.CandidateRespondedAt.Value.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt"))
+                                            </div>
+                                        }
+                                    }
+                                </div>
+
+                                @if (!string.IsNullOrWhiteSpace(interview.Feedback))
+                                {
+                                    <div class="interview-feedback">
+                                        <strong>Recruiter Feedback</strong>
+                                        <div class="mt-2">@interview.Feedback</div>
+                                    </div>
+                                }
+
+                                @if (interview.InterviewScore.HasValue)
+                                {
+                                    <div class="job-meta mt-3 mb-0">
+                                        <strong>Interview Score:</strong>
+                                        @interview.InterviewScore.Value.ToString("0.##")%
+                                    </div>
+                                }
+
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="interview-empty">
+                            No interview has been scheduled for this application yet.
+                        </p>
+                    }
+                </div>
+
+            </div>
+        }
+    }
+    else
+    {
+        <div class="empty-applications">
+            <h4>No Applications Yet</h4>
+
+            <p class="mt-2">
+                You haven't applied for any jobs yet.
+                Explore available jobs and submit your first application.
+            </p>
+
+            <a asp-controller="CandidateJobs"
+               asp-action="Index"
+               class="btn btn-primary">
+                <i class="bi bi-search"></i>
+                Browse Jobs
+            </a>
+        </div>
+    }
+
+</div>

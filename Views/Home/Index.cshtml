@@ -1,0 +1,405 @@
+﻿@{
+    ViewData["Title"] = "AIRecruit - Smart Recruitment Platform";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+}
+
+<!-- Navigation -->
+<nav class="home-nav">
+    <a asp-controller="Home" asp-action="Index" class="brand">
+        <span class="brand-icon">AI</span>
+        <span>AIRecruit<span class="brand-dot">.</span></span>
+    </a>
+
+    <div class="nav-links">
+        <a asp-controller="Home" asp-action="Index" class="active">Home</a>
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#about">About</a>
+    </div>
+
+    <div class="nav-actions">
+        <a asp-controller="Account" asp-action="Login" class="nav-login">
+            Login
+        </a>
+        <a asp-controller="Account" asp-action="Register" class="nav-register">
+            Get Started <span>↗</span>
+        </a>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-glow hero-glow-one"></div>
+    <div class="hero-glow hero-glow-two"></div>
+
+    <div class="hero-content">
+        <div class="announcement">
+            <span class="announcement-dot"></span>
+            THE FUTURE OF HIRING IS HERE
+        </div>
+
+        <h1>
+            Find the right talent.<br />
+            <span>Build the future.</span>
+        </h1>
+
+        <p class="hero-description">
+            Smarter recruitment starts here. Discover opportunities,
+            showcase your skills, and connect with the right people
+            through AI-powered recruitment technology.
+        </p>
+
+        <div class="hero-buttons">
+            <a asp-controller="Account"
+               asp-action="Register"
+               class="btn-primary-custom">
+                Start Your Journey <span>↗</span>
+            </a>
+
+            <a href="#how-it-works" class="btn-secondary-custom">
+                Discover How It Works <span>↓</span>
+            </a>
+        </div>
+
+        <div class="hero-trust">
+            <div class="trust-avatars">
+                <span>D</span>
+                <span>A</span>
+                <span>R</span>
+                <span>+</span>
+            </div>
+            <div>
+                <strong>One platform. Endless possibilities.</strong>
+                <small>For candidates and hiring teams</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Decorative Recruitment Dashboard -->
+    <div class="hero-visual">
+        <div class="dashboard-window">
+            <div class="window-topbar">
+                <div class="window-dots">
+                    <span></span><span></span><span></span>
+                </div>
+                <span class="window-title">AIRecruit Intelligence</span>
+                <span class="live-indicator">● LIVE UI</span>
+            </div>
+
+            <div class="dashboard-preview">
+                <div class="preview-sidebar">
+                    <div class="preview-logo">AI</div>
+                    <div class="side-icon selected">⌂</div>
+                    <div class="side-icon">▤</div>
+                    <div class="side-icon">◎</div>
+                    <div class="side-icon">⚙</div>
+                </div>
+
+                <div class="preview-main">
+                    <div class="preview-heading">
+                        <div>
+                            <small>YOUR CAREER SPACE</small>
+                            <h3>Welcome to your future.</h3>
+                        </div>
+                        <div class="preview-profile">AI</div>
+                    </div>
+
+                    <div class="preview-search">
+                        <span>⌕</span>
+                        Search roles, skills or opportunities...
+                        <span class="search-shortcut">⌘ K</span>
+                    </div>
+
+                    <div class="preview-section-title">
+                        <strong>Explore opportunities</strong>
+                        <span>Preview</span>
+                    </div>
+
+                    <div class="preview-job">
+                        <div class="job-logo job-logo-purple">D</div>
+                        <div class="job-info">
+                            <strong>Software Developer</strong>
+                            <small>Product & Engineering · Full-Time</small>
+                        </div>
+                        <span class="job-arrow">↗</span>
+                    </div>
+
+                    <div class="preview-job">
+                        <div class="job-logo job-logo-blue">A</div>
+                        <div class="job-info">
+                            <strong>AI / ML Engineer</strong>
+                            <small>Artificial Intelligence · Full-Time</small>
+                        </div>
+                        <span class="job-arrow">↗</span>
+                    </div>
+
+                    <div class="preview-job">
+                        <div class="job-logo job-logo-green">U</div>
+                        <div class="job-info">
+                            <strong>UI / UX Designer</strong>
+                            <small>Design & Experience · Hybrid</small>
+                        </div>
+                        <span class="job-arrow">↗</span>
+                    </div>
+
+                    <div class="ai-insight">
+                        <div class="ai-insight-icon">✦</div>
+                        <div>
+                            <strong>AI-powered matching</strong>
+                            <small>Discover roles aligned with your skills.</small>
+                        </div>
+                        <span class="insight-arrow">↗</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="floating-card floating-card-top">
+            <span class="floating-icon">✦</span>
+            <div>
+                <strong>Smarter matching</strong>
+                <small>Skills meet opportunity</small>
+            </div>
+        </div>
+
+        <div class="floating-card floating-card-bottom">
+            <span class="floating-check">✓</span>
+            <div>
+                <strong>Your next chapter</strong>
+                <small>Starts with one step.</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="hero-bottom-label">
+        <span>01</span>
+        <span class="label-line"></span>
+        <span>RETHINK RECRUITMENT</span>
+    </div>
+</section>
+
+<!-- Introduction Strip -->
+<section class="intro-strip" id="about">
+    <div>
+        <span class="section-eyebrow">A BETTER WAY TO HIRE</span>
+        <h2>Less searching. <span>More discovering.</span></h2>
+    </div>
+
+    <p>
+        Bring candidates, recruiters and intelligent technology
+        together in one simple recruitment experience.
+    </p>
+</section>
+
+<!-- Features -->
+<section class="features-section" id="features">
+    <div class="section-heading">
+        <span class="section-eyebrow">BUILT FOR WHAT'S NEXT</span>
+        <h2>Recruitment, <span>reimagined.</span></h2>
+        <p>
+            Tools designed to make every step of the hiring journey
+            clearer, smarter and more connected.
+        </p>
+    </div>
+
+    <div class="features-grid">
+        <article class="feature-card feature-card-highlight">
+            <div class="feature-number">01 / CANDIDATES</div>
+            <div class="feature-icon purple-icon">⌕</div>
+            <h3>Discover opportunities</h3>
+            <p>
+                Explore job opportunities and find roles that fit your
+                interests, skills and career goals.
+            </p>
+            <a asp-controller="Account"
+               asp-action="Register"
+               class="feature-link">
+                Explore your future <span>↗</span>
+            </a>
+            <div class="feature-decoration decoration-purple"></div>
+        </article>
+
+        <article class="feature-card">
+            <div class="feature-number">02 / RECRUITERS</div>
+            <div class="feature-icon blue-icon">▤</div>
+            <h3>Hire with confidence</h3>
+            <p>
+                Create job listings, manage applications and organize
+                your recruitment workflow in one place.
+            </p>
+            <a asp-controller="Account"
+               asp-action="Register"
+               class="feature-link">
+                Get started <span>↗</span>
+            </a>
+            <div class="feature-decoration decoration-blue"></div>
+        </article>
+
+        <article class="feature-card">
+            <div class="feature-number">03 / AI TECHNOLOGY</div>
+            <div class="feature-icon green-icon">✳</div>
+            <h3>Make smarter matches</h3>
+            <p>
+                Our planned AI capabilities aim to help compare resume
+                skills with job requirements.
+            </p>
+            <a href="#how-it-works" class="feature-link">
+                See how it works <span>↗</span>
+            </a>
+            <div class="feature-decoration decoration-green"></div>
+        </article>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="workflow-section" id="how-it-works">
+    <div class="workflow-content">
+        <span class="section-eyebrow">SIMPLE BY DESIGN</span>
+        <h2>Your next opportunity<br />starts <span>right here.</span></h2>
+        <p>
+            A straightforward recruitment journey that brings
+            candidates and recruiters closer together.
+        </p>
+
+        <a asp-controller="Account"
+           asp-action="Register"
+           class="btn-primary-custom">
+            Create Your Account <span>↗</span>
+        </a>
+    </div>
+
+    <div class="workflow-steps">
+        <div class="workflow-step">
+            <div class="step-number">01</div>
+            <div>
+                <h3>Create your profile</h3>
+                <p>Register and tell us about your experience or hiring needs.</p>
+            </div>
+            <span class="step-check">✓</span>
+        </div>
+
+        <div class="workflow-step">
+            <div class="step-number">02</div>
+            <div>
+                <h3>Explore and connect</h3>
+                <p>Discover jobs or manage recruitment opportunities.</p>
+            </div>
+            <span class="step-check">✓</span>
+        </div>
+
+        <div class="workflow-step">
+            <div class="step-number">03</div>
+            <div>
+                <h3>Move forward</h3>
+                <p>Track applications and take the next step in your journey.</p>
+            </div>
+            <span class="step-check">✓</span>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+    <div class="cta-glow"></div>
+    <span class="section-eyebrow">YOUR NEXT CHAPTER AWAITS</span>
+    <h2>Great careers begin<br />with <span>the right connection.</span></h2>
+    <p>
+        Whether you're looking for your next role or your next great hire,
+        start here.
+    </p>
+
+    <div class="cta-buttons">
+        <a asp-controller="Account"
+           asp-action="Register"
+           class="btn-primary-custom">
+            Get Started Today <span>↗</span>
+        </a>
+        <a asp-controller="Account"
+           asp-action="Login"
+           class="btn-secondary-custom">
+            Already a member? Login
+        </a>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="home-footer">
+    <div class="footer-top">
+        <div class="footer-brand">
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="brand">
+                <span class="brand-icon">AI</span>
+                <span>AIRecruit<span class="brand-dot">.</span></span>
+            </a>
+            <p>
+                Bringing people and opportunities together
+                through smarter recruitment.
+            </p>
+        </div>
+
+        <div class="footer-column">
+            <h4>Explore</h4>
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#about">About Us</a>
+        </div>
+
+        <div class="footer-column">
+            <h4>Account</h4>
+            <a asp-controller="Account" asp-action="Login">Login</a>
+            <a asp-controller="Account" asp-action="Register">Register</a>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <span>© @DateTime.Now.Year AIRecruit. All rights reserved.</span>
+        <span>Designed for the future of recruitment. <span class="footer-heart">✦</span></span>
+    </div>
+</footer>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const sections = document.querySelectorAll(
+                ".intro-strip, .section-heading, .feature-card, " +
+                ".workflow-content, .workflow-step, .cta-section, " +
+                ".footer-top, .footer-bottom"
+            );
+
+            if (!("IntersectionObserver" in window)) {
+                sections.forEach(function (section) {
+                    section.classList.add("is-visible");
+                });
+                return;
+            }
+
+            sections.forEach(function (section, index) {
+                section.classList.add("js-reveal");
+
+                if (section.classList.contains("feature-card")) {
+                    section.style.transitionDelay =
+                        (index % 3) * 100 + "ms";
+                }
+            });
+
+            const observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("is-visible");
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.12
+            });
+
+            sections.forEach(function (section) {
+                observer.observe(section);
+            });
+        });
+    </script>
+}

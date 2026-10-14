@@ -1,0 +1,211 @@
+﻿@model AIRecruitmentSystem.Models.Job
+
+@{
+    ViewData["Title"] = "Edit Job";
+}
+
+<style>
+    .job-edit-page {
+        max-width: 950px;
+        margin: 30px auto;
+        padding: 25px;
+        color: #f3f4f6;
+    }
+
+    .job-edit-card {
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 18px;
+        padding: 30px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    }
+
+    .job-edit-title {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .job-edit-subtitle {
+        color: #94a3b8;
+        margin-bottom: 28px;
+    }
+
+    .job-edit-page .form-label {
+        color: #e2e8f0;
+        font-weight: 600;
+    }
+
+    .job-edit-page .form-control,
+    .job-edit-page .form-select {
+        background-color: #0f172a;
+        border: 1px solid #475569;
+        color: #f8fafc;
+        border-radius: 9px;
+        padding: 11px 12px;
+    }
+
+        .job-edit-page .form-control:focus,
+        .job-edit-page .form-select:focus {
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
+        }
+
+    .job-edit-page textarea.form-control {
+        min-height: 140px;
+    }
+
+    .job-edit-page .text-danger {
+        font-size: 13px;
+    }
+
+    .job-edit-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 25px;
+    }
+
+        .job-edit-actions .btn {
+            border-radius: 9px;
+            padding: 10px 20px;
+            font-weight: 600;
+        }
+
+    @@media (max-width: 576px) {
+        .job-edit-page {
+            padding: 12px;
+            margin: 15px auto;
+        }
+
+        .job-edit-card {
+            padding: 20px 16px;
+        }
+
+        .job-edit-title {
+            font-size: 23px;
+        }
+
+        .job-edit-actions .btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="job-edit-page">
+    <div class="job-edit-card">
+        <h1 class="job-edit-title">
+            <i class="bi bi-pencil-square"></i> Edit Job
+        </h1>
+
+        <p class="job-edit-subtitle">
+            Update the job details below and save your changes.
+        </p>
+
+        <form asp-controller="Jobs"
+              asp-action="Edit"
+              asp-route-id="@Model.Id"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" asp-for="Id" />
+
+            <div asp-validation-summary="ModelOnly"
+                 class="alert alert-danger"
+                 role="alert"></div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="Title" class="form-label">Job Title</label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Department" class="form-label">Department</label>
+                    <input asp-for="Department" class="form-control" />
+                    <span asp-validation-for="Department" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Location" class="form-label">Location</label>
+                    <input asp-for="Location" class="form-control" />
+                    <span asp-validation-for="Location" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="EmploymentType" class="form-label">Employment Type</label>
+                    <select asp-for="EmploymentType" class="form-select">
+                        <option value="Full-time">Full-time</option>
+                        <option value="Part-time">Part-time</option>
+                        <option value="Internship">Internship</option>
+                        <option value="Contract">Contract</option>
+                        <option value="Remote">Remote</option>
+                    </select>
+                    <span asp-validation-for="EmploymentType" class="text-danger"></span>
+                </div>
+
+                <div class="col-12">
+                    <label asp-for="Description" class="form-label">Job Description</label>
+                    <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="col-12">
+                    <label asp-for="Requirements" class="form-label">Requirements</label>
+                    <textarea asp-for="Requirements"
+                              class="form-control"
+                              rows="4"
+                              placeholder="Skills, qualifications and experience required"></textarea>
+                    <span asp-validation-for="Requirements" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="MinimumSalary" class="form-label">Minimum Salary</label>
+                    <input asp-for="MinimumSalary"
+                           type="number"
+                           min="0"
+                           step="0.01"
+                           class="form-control" />
+                    <span asp-validation-for="MinimumSalary" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="MaximumSalary" class="form-label">Maximum Salary</label>
+                    <input asp-for="MaximumSalary"
+                           type="number"
+                           min="0"
+                           step="0.01"
+                           class="form-control" />
+                    <span asp-validation-for="MaximumSalary" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="ClosingDate" class="form-label">Application Closing Date</label>
+                    <input asp-for="ClosingDate"
+                           type="date"
+                           asp-format="{0:yyyy-MM-dd}"
+                           class="form-control" />
+                    <span asp-validation-for="ClosingDate" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="job-edit-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check-circle"></i> Save Changes
+                </button>
+
+                <a asp-controller="Jobs"
+                   asp-action="Index"
+                   class="btn btn-outline-light">
+                    <i class="bi bi-arrow-left"></i> Back to Jobs
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

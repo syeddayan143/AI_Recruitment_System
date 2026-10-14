@@ -1,0 +1,257 @@
+﻿@model AIRecruitmentSystem.Models.ResumeAnalysisPageViewModel
+
+@{
+    ViewData["Title"] = "AI Resume Analysis";
+}
+
+<style>
+    body {
+        background: #0a0e18 !important;
+        color: #f4f6ff;
+    }
+
+    .analysis-page {
+        min-height: 100vh;
+        padding: 40px 16px 70px;
+        background: radial-gradient(ellipse at 10% 0%, rgba(94,82,220,.18), transparent 38%), radial-gradient(ellipse at 100% 70%, rgba(40,125,190,.12), transparent 35%), #0a0e18;
+    }
+
+    .analysis-shell {
+        max-width: 1000px;
+        margin: auto;
+    }
+
+    .analysis-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .analysis-brand {
+        color: #f4f6ff;
+        font-weight: 800;
+    }
+
+    .analysis-card {
+        padding: 25px;
+        margin-bottom: 20px;
+        border: 1px solid rgba(255,255,255,.10);
+        border-radius: 19px;
+        background: linear-gradient(145deg, #182030, #0f1521);
+        box-shadow: 0 15px 45px rgba(0,0,0,.16);
+    }
+
+    .analysis-eyebrow {
+        color: #a295ff;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    .analysis-page h1 {
+        margin: 12px 0;
+        color: #f4f6ff;
+        font-size: clamp(30px, 5vw, 43px);
+        font-weight: 850;
+        overflow-wrap: anywhere;
+    }
+
+    .analysis-page h2 {
+        margin-bottom: 15px;
+        color: #dce5ff;
+        font-size: 19px;
+        font-weight: 800;
+    }
+
+    .analysis-page p, .analysis-page li {
+        color: #c1cbe0;
+        line-height: 1.8;
+        overflow-wrap: anywhere;
+    }
+
+    .analysis-page ul {
+        padding-left: 22px;
+        margin-bottom: 0;
+    }
+
+    .analysis-muted {
+        color: #8e9bb2 !important;
+        font-size: 13px;
+    }
+
+    .analysis-tag {
+        display: inline-block;
+        padding: 8px 12px;
+        margin: 4px;
+        border: 1px solid rgba(139,156,255,.22);
+        border-radius: 30px;
+        color: #d3dcff;
+        background: rgba(139,156,255,.09);
+        font-size: 13px;
+    }
+
+    .analysis-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 11px 16px;
+        border: 1px solid rgba(139,176,255,.3);
+        border-radius: 11px;
+        color: #c8d7ff;
+        background: rgba(139,176,255,.08);
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 750;
+    }
+
+    .analysis-notice {
+        padding: 14px 17px;
+        border: 1px solid rgba(255,193,100,.2);
+        border-radius: 12px;
+        color: #e9d5a8;
+        background: rgba(255,193,100,.06);
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+    @@media (max-width: 600px) {
+        .analysis-page {
+            padding: 25px 12px 45px;
+        }
+
+        .analysis-card {
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="analysis-page">
+    <main class="analysis-shell">
+
+        <header class="analysis-top">
+            <div class="analysis-brand">✦ AI Recruitment System</div>
+
+            <a asp-controller="Resume"
+               asp-action="Index"
+               class="analysis-btn">
+                ← My Resumes
+            </a>
+        </header>
+
+        <section class="analysis-card">
+            <div class="analysis-eyebrow">Groq AI · Resume review</div>
+
+            <h1>AI Resume Analysis</h1>
+
+            <p>
+                <strong>Resume:</strong>
+                @Model.Resume.OriginalFileName
+            </p>
+
+            <p class="analysis-muted">
+                This analysis is based on the readable text extracted
+                from your uploaded resume.
+            </p>
+        </section>
+
+        <section class="analysis-card">
+            <h2>Resume Summary</h2>
+            <p>@Model.Analysis.Summary</p>
+        </section>
+
+        <section class="analysis-card">
+            <h2>Skills Identified by AI</h2>
+
+            @if (Model.Analysis.Skills.Count > 0)
+            {
+                <div>
+                    @foreach (var skill in Model.Analysis.Skills)
+                    {
+                        <span class="analysis-tag">@skill</span>
+                    }
+                </div>
+            }
+            else
+            {
+                <p>No skills were clearly identified.</p>
+            }
+        </section>
+
+        <section class="analysis-card">
+            <h2>Experience</h2>
+            <p>@Model.Analysis.Experience</p>
+        </section>
+
+        <section class="analysis-card">
+            <h2>Education</h2>
+
+            @if (Model.Analysis.Education.Count > 0)
+            {
+                <ul>
+                    @foreach (var education in Model.Analysis.Education)
+                    {
+                        <li>@education</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>No education details were clearly identified.</p>
+            }
+        </section>
+
+        <section class="analysis-card">
+            <h2>Strengths</h2>
+
+            @if (Model.Analysis.Strengths.Count > 0)
+            {
+                <ul>
+                    @foreach (var strength in Model.Analysis.Strengths)
+                    {
+                        <li>@strength</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>No clear strengths were returned.</p>
+            }
+        </section>
+
+        <section class="analysis-card">
+            <h2>Suggested Improvements</h2>
+
+            @if (Model.Analysis.Improvements.Count > 0)
+            {
+                <ul>
+                    @foreach (var improvement in Model.Analysis.Improvements)
+                    {
+                        <li>@improvement</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>No improvement suggestions were returned.</p>
+            }
+        </section>
+
+        <div class="analysis-notice mb-4">
+            AI results may contain errors or omissions. Verify all details
+            before relying on the suggestions. Resume text is sent to Groq
+            when you request an analysis, so use only information you are
+            permitted to share with the service.
+        </div>
+
+        <a asp-controller="Resume"
+           asp-action="Index"
+           class="analysis-btn">
+            ← Back to My Resumes
+        </a>
+
+    </main>
+</div>

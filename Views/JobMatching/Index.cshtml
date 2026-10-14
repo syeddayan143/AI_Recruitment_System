@@ -1,0 +1,321 @@
+﻿@model AIRecruitmentSystem.Models.JobMatchingPageViewModel
+
+@{
+    ViewData["Title"] = "AI Job Matching";
+}
+
+<style>
+    .matching-page {
+        max-width: 950px;
+        margin: 35px auto;
+        padding: 0 18px;
+        color: #f4f6fb;
+    }
+
+    .matching-card {
+        background: linear-gradient(145deg, #151c2b, #101522);
+        border: 1px solid #293449;
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 20px;
+        box-shadow: 0 12px 35px rgba(0, 0, 0, .15);
+    }
+
+    .matching-muted {
+        color: #aab6cb;
+    }
+
+    .matching-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+    }
+
+    .matching-select {
+        width: 100%;
+        padding: 12px;
+        background: #0c1220;
+        color: #f4f6fb;
+        border: 1px solid #36435d;
+        border-radius: 9px;
+        margin-bottom: 18px;
+    }
+
+    .matching-button {
+        background: #526de5;
+        color: white;
+        border: 0;
+        border-radius: 9px;
+        padding: 12px 18px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+        .matching-button:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+
+    .match-score {
+        font-size: 48px;
+        font-weight: 800;
+        line-height: 1.2;
+        margin: 10px 0;
+    }
+
+    .match-progress {
+        height: 10px;
+        background: #273146;
+        border-radius: 20px;
+        overflow: hidden;
+        margin: 18px 0;
+    }
+
+    .match-progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #526de5, #52c6b5);
+        border-radius: 20px;
+    }
+
+    .matching-list {
+        padding-left: 20px;
+        margin-bottom: 0;
+    }
+
+        .matching-list li {
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+
+    .matching-alert {
+        background: #39282a;
+        border: 1px solid #794448;
+        color: #ffd5d5;
+        padding: 12px 16px;
+        border-radius: 10px;
+        margin-bottom: 18px;
+    }
+
+    .matching-tag {
+        display: inline-block;
+        border: 1px solid #3c4d70;
+        background: #202b43;
+        color: #dce5ff;
+        padding: 6px 10px;
+        border-radius: 18px;
+        margin: 4px;
+        font-size: 13px;
+    }
+
+    @@media (max-width: 600px) {
+        .matching-page {
+            margin-top: 20px;
+            padding: 0 12px;
+        }
+
+        .matching-card {
+            padding: 18px;
+        }
+
+        .match-score {
+            font-size: 38px;
+        }
+    }
+</style>
+
+<div class="matching-page">
+    <div class="matching-card">
+        <p class="matching-muted mb-2">AI-POWERED CAREER TOOL</p>
+        <h1 class="h3 fw-bold">AI Job Matching</h1>
+        <p class="matching-muted">
+            Compare your resume with an active job and discover relevant
+            skills, missing requirements and practical ways to improve.
+        </p>
+    </div>
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="matching-alert" asp-validation-summary="All"></div>
+    }
+
+    @if (!Model.Resumes.Any())
+    {
+        <div class="matching-card">
+            <h2 class="h5">Upload a resume first</h2>
+            <p class="matching-muted">
+                You need a resume before you can compare it with a job.
+            </p>
+            <a asp-controller="Resume"
+               asp-action="Index"
+               class="btn btn-outline-light">
+                Go to My Resumes
+            </a>
+        </div>
+    }
+    else if (!Model.Jobs.Any())
+    {
+        <div class="matching-card">
+            <h2 class="h5">No active jobs available</h2>
+            <p class="matching-muted">
+                There are currently no active jobs to compare against.
+                Please check again later.
+            </p>
+        </div>
+    }
+    else
+    {
+        <div class="matching-card">
+            <h2 class="h5 fw-bold mb-3">Choose resume and job</h2>
+
+            <form asp-controller="JobMatching"
+                  asp-action="Analyze"
+                  method="post">
+                @Html.AntiForgeryToken()
+
+                <label asp-for="ResumeId" class="matching-label">
+                    Your resume
+                </label>
+
+                <select asp-for="ResumeId"
+                        asp-items="Model.Resumes"
+                        class="matching-select"
+                        required>
+                    <option value="">Select your resume</option>
+                </select>
+
+                <label asp-for="JobId" class="matching-label">
+                    Active job
+                </label>
+
+                <select asp-for="JobId"
+                        asp-items="Model.Jobs"
+                        class="matching-select"
+                        required>
+                    <option value="">Select a job</option>
+                </select>
+
+                <button type="submit" class="matching-button">
+                    Analyze Job Match
+                </button>
+            </form>
+        </div>
+    }
+
+    @if (Model.Result != null)
+    {
+        <div class="matching-card">
+            <p class="matching-muted mb-1">MATCH ANALYSIS</p>
+            <h2 class="h4 fw-bold">Matching Result</h2>
+
+            <p class="matching-muted mb-1">
+                Resume: @Model.SelectedResumeName
+            </p>
+            <p class="matching-muted">
+                Job: @Model.SelectedJobTitle
+            </p>
+
+            <div class="match-score">
+                @Model.Result.MatchPercentage%
+            </div>
+
+            <div class="match-progress"
+                 role="progressbar"
+                 aria-label="Estimated job match score"
+                 aria-valuemin="0"
+                 aria-valuemax="100"
+                 aria-valuenow="@Model.Result.MatchPercentage">
+                <div class="match-progress-fill"
+                     style="width: @Model.Result.MatchPercentage%">
+                </div>
+            </div>
+
+            <p class="matching-muted">
+                This is an AI-estimated alignment score, not a hiring
+                probability or guarantee.
+            </p>
+
+            <h3 class="h6 fw-bold mt-4">AI Assessment</h3>
+            <p>@Model.Result.Summary</p>
+        </div>
+
+        <div class="matching-card">
+            <h3 class="h5 fw-bold">Matched Skills</h3>
+
+            @if (Model.Result.MatchedSkills.Any())
+            {
+                @foreach (var skill in Model.Result.MatchedSkills)
+                {
+                    <span class="matching-tag">@skill</span>
+                }
+            }
+            else
+            {
+                <p class="matching-muted">
+                    No clear matching skills were identified.
+                </p>
+            }
+        </div>
+
+        <div class="matching-card">
+            <h3 class="h5 fw-bold">Missing or Unconfirmed Skills</h3>
+
+            @if (Model.Result.MissingSkills.Any())
+            {
+                <ul class="matching-list">
+                    @foreach (var skill in Model.Result.MissingSkills)
+                    {
+                        <li>@skill</li>
+                    }
+                </ul>
+                <p class="matching-muted mt-3">
+                    These skills were not clearly demonstrated in the resume.
+                    This does not necessarily mean you do not have them.
+                </p>
+            }
+            else
+            {
+                <p class="matching-muted">
+                    No missing requirements were identified by the AI.
+                </p>
+            }
+        </div>
+
+        <div class="matching-card">
+            <h3 class="h5 fw-bold">Other Relevant Skills</h3>
+
+            @if (Model.Result.AdditionalRelevantSkills.Any())
+            {
+                @foreach (var skill in Model.Result.AdditionalRelevantSkills)
+                {
+                    <span class="matching-tag">@skill</span>
+                }
+            }
+            else
+            {
+                <p class="matching-muted">
+                    No additional relevant skills were identified.
+                </p>
+            }
+        </div>
+
+        <div class="matching-card">
+            <h3 class="h5 fw-bold">Recommendations</h3>
+
+            @if (Model.Result.Recommendations.Any())
+            {
+                <ul class="matching-list">
+                    @foreach (var recommendation in Model.Result.Recommendations)
+                    {
+                        <li>@recommendation</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="matching-muted">
+                    No recommendations were returned.
+                </p>
+            }
+        </div>
+    }
+</div>

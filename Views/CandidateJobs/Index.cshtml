@@ -1,0 +1,660 @@
+﻿@model AIRecruitmentSystem.ViewModels.CandidateJobsIndexViewModel
+
+@{
+    ViewData["Title"] = "Find Jobs";
+}
+
+<style>
+    .cj-page {
+        min-height: 100vh;
+        padding: 40px clamp(16px, 4vw, 60px);
+        background: #101116;
+        color: #f4f4f5;
+        font-family: Inter, "Segoe UI", sans-serif;
+    }
+
+    .cj-wrap {
+        width: 100%;
+        max-width: 1500px;
+        margin: 0 auto;
+    }
+
+    .cj-hero {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 24px;
+        flex-wrap: wrap;
+        margin-bottom: 30px;
+    }
+
+    .cj-eyebrow {
+        color: #a78bfa;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    .cj-hero h1 {
+        margin: 12px 0 9px;
+        color: #fff;
+        font-size: clamp(30px, 4vw, 44px);
+        font-weight: 850;
+        letter-spacing: -1.5px;
+    }
+
+    .cj-hero p {
+        max-width: 650px;
+        margin: 0;
+        color: #a1a1aa;
+        font-size: 15px;
+        line-height: 1.8;
+    }
+
+    .cj-hero-badge {
+        padding: 12px 16px;
+        border: 1px solid #39304f;
+        border-radius: 12px;
+        background: #201a2e;
+        color: #d8b4fe;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .cj-alert {
+        margin-bottom: 18px;
+        padding: 15px 18px;
+        border: 1px solid #353640;
+        border-radius: 12px;
+        background: #1a1b22;
+        color: #e4e4e7;
+        line-height: 1.7;
+    }
+
+        .cj-alert.success {
+            border-color: #286747;
+            background: #14251d;
+            color: #86efac;
+        }
+
+        .cj-alert.error {
+            border-color: #713333;
+            background: #2a191b;
+            color: #fca5a5;
+        }
+
+        .cj-alert a {
+            margin-left: 5px;
+            color: #c4b5fd;
+            font-weight: 800;
+        }
+
+    .cj-actions {
+        display: flex;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin: 0 0 25px;
+    }
+
+    .cj-applications-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        padding: 11px 17px;
+        border: 1px solid #66509a;
+        border-radius: 10px;
+        background: #211b2c;
+        color: #d8b4fe;
+        font-size: 13px;
+        font-weight: 800;
+        text-decoration: none;
+        transition: background .2s ease, transform .2s ease;
+    }
+
+        .cj-applications-btn:hover {
+            background: #302343;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .cj-applications-btn i {
+            font-size: 16px;
+        }
+
+    .cj-section-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin: 32px 0 18px;
+    }
+
+        .cj-section-heading h2 {
+            margin: 0;
+            color: #fff;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .cj-section-heading p {
+            margin: 5px 0 0;
+            color: #8e909d;
+            font-size: 13px;
+        }
+
+    .cj-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 22px;
+    }
+
+    .cj-card {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        padding: 25px;
+        border: 1px solid #2c2d38;
+        border-radius: 20px;
+        background: linear-gradient(145deg, #1c1d25 0%, #17181e 100%);
+        box-shadow: 0 12px 35px rgba(0, 0, 0, .12);
+        transition: border-color .22s ease, transform .22s ease, box-shadow .22s ease;
+    }
+
+        .cj-card:hover {
+            transform: translateY(-4px);
+            border-color: #66509a;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, .23);
+        }
+
+    .cj-card-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+    }
+
+    .cj-title {
+        margin: 0;
+        color: #fff;
+        font-size: clamp(19px, 2vw, 23px);
+        font-weight: 800;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+    }
+
+    .cj-department {
+        margin-top: 7px;
+        color: #a1a1aa;
+        font-size: 13px;
+    }
+
+    .cj-score {
+        flex-shrink: 0;
+        width: 88px;
+        padding: 11px 8px;
+        border: 1px solid #473768;
+        border-radius: 14px;
+        background: #29213b;
+        text-align: center;
+    }
+
+    .cj-score-number {
+        display: block;
+        color: #d8b4fe;
+        font-size: 23px;
+        font-weight: 850;
+        line-height: 1.25;
+    }
+
+    .cj-score-label {
+        display: block;
+        margin-top: 3px;
+        color: #b7a9d9;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+
+    .cj-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 20px;
+    }
+
+        .cj-meta span {
+            padding: 7px 10px;
+            border: 1px solid #343540;
+            border-radius: 9px;
+            background: #22232b;
+            color: #d4d4d8;
+            font-size: 12px;
+            overflow-wrap: anywhere;
+        }
+
+    .cj-salary {
+        margin-top: 19px;
+        color: #86efac;
+        font-size: 17px;
+        font-weight: 800;
+    }
+
+    .cj-description {
+        margin: 14px 0 0;
+        color: #b5b6c1;
+        font-size: 14px;
+        line-height: 1.8;
+        overflow-wrap: anywhere;
+    }
+
+    .cj-match-message {
+        padding: 12px 14px;
+        margin-top: 17px;
+        border: 1px solid #39304f;
+        border-radius: 11px;
+        background: #211b2c;
+        color: #d8c7f8;
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+        .cj-match-message strong {
+            color: #e9d5ff;
+        }
+
+    .cj-skills {
+        margin-top: 22px;
+    }
+
+    .cj-skills-title {
+        margin-bottom: 11px;
+        color: #e4e4e7;
+        font-size: 11px;
+        font-weight: 850;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+    }
+
+    .cj-skill-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .cj-skill {
+        display: inline-block;
+        padding: 7px 10px;
+        border: 1px solid #285c46;
+        border-radius: 8px;
+        background: #172b23;
+        color: #86efac;
+        font-size: 12px;
+        overflow-wrap: anywhere;
+    }
+
+        .cj-skill.missing {
+            border-color: #68402d;
+            background: #30221d;
+            color: #fdba74;
+        }
+
+    .cj-card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-top: auto;
+        padding-top: 23px;
+    }
+
+    .cj-posted {
+        color: #898b98;
+        font-size: 12px;
+    }
+
+    .cj-divider {
+        height: 1px;
+        margin-top: 23px;
+        background: #30313b;
+    }
+
+    .cj-apply-form {
+        margin: 0;
+    }
+
+    .cj-apply {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 12px 19px;
+        border: 0;
+        border-radius: 11px;
+        background: linear-gradient(110deg, #8b5cf6, #6d4aff);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 800;
+        text-decoration: none;
+        cursor: pointer;
+        box-shadow: 0 5px 18px rgba(124, 58, 237, .19);
+        transition: transform .2s ease, filter .2s ease;
+    }
+
+        .cj-apply:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.12);
+            color: #fff;
+        }
+
+    .cj-empty {
+        padding: 65px 20px;
+        border: 1px dashed #3b3c48;
+        border-radius: 20px;
+        background: #18191f;
+        text-align: center;
+    }
+
+    .cj-empty-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 66px;
+        height: 66px;
+        margin: 0 auto 20px;
+        border: 1px solid #40335f;
+        border-radius: 20px;
+        background: #29213b;
+        color: #d8b4fe;
+        font-size: 28px;
+    }
+
+    .cj-empty h3 {
+        margin-bottom: 10px;
+        color: #fff;
+        font-size: 22px;
+        font-weight: 800;
+    }
+
+    .cj-empty p {
+        margin: 0;
+        color: #a1a1aa;
+        line-height: 1.8;
+    }
+
+    .cj-tip {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-top: 27px;
+        padding: 17px 19px;
+        border: 1px solid #30313c;
+        border-radius: 14px;
+        background: #18191f;
+        color: #a1a1aa;
+        font-size: 13px;
+        line-height: 1.8;
+    }
+
+        .cj-tip strong {
+            color: #d8b4fe;
+        }
+
+    @@media (max-width: 900px) {
+        .cj-list {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media (max-width: 520px) {
+        .cj-page {
+            padding: 27px 14px 35px;
+        }
+
+        .cj-card {
+            padding: 18px;
+            border-radius: 16px;
+        }
+
+        .cj-card-top {
+            gap: 10px;
+        }
+
+        .cj-score {
+            width: 73px;
+            padding: 9px 5px;
+        }
+
+        .cj-score-number {
+            font-size: 19px;
+        }
+
+        .cj-card-footer {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        .cj-apply,
+        .cj-apply-form {
+            width: 100%;
+        }
+
+        .cj-apply {
+            display: flex;
+        }
+
+        .cj-actions {
+            justify-content: stretch;
+        }
+
+        .cj-applications-btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="cj-page">
+    <div class="cj-wrap">
+
+        <section class="cj-hero">
+            <div>
+                <div class="cj-eyebrow">AI-Powered Career Matching</div>
+                <h1>Find Your Next Opportunity<span style="color:#a78bfa;">.</span></h1>
+                <p>
+                    Explore opportunities tailored to your skills.
+                    Compare your match score, discover skill gaps, and find your next career move.
+                </p>
+            </div>
+
+            <div class="cj-hero-badge">
+                ✦ Smart Job Matching
+            </div>
+        </section>
+
+        @* My Applications button *@
+        <div class="cj-actions">
+            <a asp-controller="CandidateApplications"
+               asp-action="Index"
+               class="btn btn-outline-primary cj-applications-btn">
+                <i class="bi bi-clipboard-check"></i>
+                My Applications
+            </a>
+        </div>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="cj-alert success" role="status">
+                @TempData["Success"]
+            </div>
+        }
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="cj-alert error" role="alert">
+                @TempData["Error"]
+            </div>
+        }
+
+        @if (!Model.HasResume)
+        {
+            <div class="cj-alert">
+                <strong>Complete your profile first.</strong>
+                Upload your resume to access job applications.
+                <a asp-controller="Resume" asp-action="Index">Upload Resume →</a>
+            </div>
+        }
+
+        <div class="cj-section-heading">
+            <div>
+                <h2>Explore Opportunities</h2>
+                <p>Review the details and see how your skills align with each role.</p>
+            </div>
+        </div>
+
+        @if (Model.Jobs == null || !Model.Jobs.Any())
+        {
+            <div class="cj-empty">
+                <div class="cj-empty-icon">⌕</div>
+                <h3>No jobs available right now</h3>
+                <p>New opportunities will appear here when they become available.</p>
+            </div>
+        }
+        else
+        {
+            <div class="cj-list">
+                @foreach (var job in Model.Jobs)
+                {
+                    <article class="cj-card">
+
+                        <div class="cj-card-top">
+                            <div>
+                                <h3 class="cj-title">@job.Title</h3>
+
+                                @if (!string.IsNullOrWhiteSpace(job.Department))
+                                {
+                                    <div class="cj-department">@job.Department</div>
+                                }
+                            </div>
+
+                            <div class="cj-score">
+                                <span class="cj-score-number">@job.MatchPercentage%</span>
+                                <span class="cj-score-label">Match Score</span>
+                            </div>
+                        </div>
+
+                        <div class="cj-meta">
+                            @if (!string.IsNullOrWhiteSpace(job.Location))
+                            {
+                                <span>📍 @job.Location</span>
+                            }
+
+                            @if (!string.IsNullOrWhiteSpace(job.EmploymentType))
+                            {
+                                <span>💼 @job.EmploymentType</span>
+                            }
+                        </div>
+
+                        @if (job.MinimumSalary.HasValue || job.MaximumSalary.HasValue)
+                        {
+                            <div class="cj-salary">
+                                Salary:
+                                @if (job.MinimumSalary.HasValue)
+                                {
+                                    @job.MinimumSalary.Value.ToString("N0")
+                                }
+                                else
+                                {
+                                    @:Not specified
+                                }
+
+                                @if (job.MaximumSalary.HasValue)
+                                {
+                                    @: – @job.MaximumSalary.Value.ToString("N0")
+                                }
+                            </div>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(job.MatchMessage))
+                        {
+                            <div class="cj-match-message">
+                                <strong>AI Match Insight:</strong>
+                                @job.MatchMessage
+                            </div>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(job.Description))
+                        {
+                            <div class="cj-skills">
+                                <div class="cj-skills-title">About this role</div>
+                                <p class="cj-description">@job.Description</p>
+                            </div>
+                        }
+
+                        @if (job.MatchedSkills != null && job.MatchedSkills.Any())
+                        {
+                            <div class="cj-skills">
+                                <div class="cj-skills-title">✓ Your matched skills</div>
+                                <div class="cj-skill-list">
+                                    @foreach (var skill in job.MatchedSkills)
+                                    {
+                                        <span class="cj-skill">@skill</span>
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                        @if (job.MissingSkills != null && job.MissingSkills.Any())
+                        {
+                            <div class="cj-skills">
+                                <div class="cj-skills-title">↗ Skills to develop</div>
+                                <div class="cj-skill-list">
+                                    @foreach (var skill in job.MissingSkills)
+                                    {
+                                        <span class="cj-skill missing">@skill</span>
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                        <div class="cj-divider"></div>
+
+                        <div class="cj-card-footer">
+                            <span class="cj-posted">
+                                @if (job.PostedAt != default)
+                                {
+                                    <text>Posted @job.PostedAt.ToString("dd MMM yyyy")</text>
+                                }
+                            </span>
+
+                            @if (Model.HasResume)
+                            {
+                                <a asp-controller="CandidateJobs"
+                                   asp-action="ApplyForm"
+                                   asp-route-jobId="@job.Id"
+                                   class="btn btn-primary cj-apply">
+                                    Apply Now
+                                </a>
+                            }
+                        </div>
+
+                    </article>
+                }
+            </div>
+        }
+
+        <div class="cj-tip">
+            <span aria-hidden="true">✦</span>
+            <div>
+                <strong>Improve your match score.</strong>
+                Keep your resume and candidate profile up to date.
+                Use the missing-skills section to identify areas you may want to learn.
+            </div>
+        </div>
+
+    </div>
+</div>

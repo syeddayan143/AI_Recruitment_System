@@ -1,0 +1,112 @@
+﻿@model AIRecruitmentSystem.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Create Account";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Create Account | AIRecruitmentSystem</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="~/css/auth.css" rel="stylesheet" asp-append-version="true" />
+</head>
+<body>
+    <main class="auth-shell">
+        <section class="auth-intro">
+            <a class="brand" asp-controller="Home" asp-action="Index">
+                <span class="brand-mark">AI</span>
+                <span>Recruit<span class="brand-accent">AI</span></span>
+            </a>
+
+            <div class="intro-content">
+                <span class="eyebrow">YOUR NEXT CHAPTER STARTS HERE</span>
+                <h1>Great careers begin with the <span>right connection.</span></h1>
+                <p>Discover opportunities, showcase your skills, and bring people and possibilities together.</p>
+
+                <div class="feature-row">
+                    <span class="feature-icon">✦</span>
+                    <div>
+                        <strong>Smarter recruitment</strong>
+                        <p>Make your next career move with confidence.</p>
+                    </div>
+                </div>
+
+                <div class="feature-row">
+                    <span class="feature-icon">↗</span>
+                    <div>
+                        <strong>One professional profile</strong>
+                        <p>Keep your career information organized.</p>
+                    </div>
+                </div>
+            </div>
+
+            <p class="intro-footer">AI-powered recruitment, designed around people.</p>
+        </section>
+
+        <section class="auth-panel">
+            <div class="auth-card">
+                <span class="eyebrow">GET STARTED</span>
+                <h2>Create your account</h2>
+                <p class="auth-subtitle">Join the platform and take the next step.</p>
+
+                <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+                <form asp-controller="Account" asp-action="Register" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div class="field-group">
+                        <label asp-for="FullName"></label>
+                        <input asp-for="FullName" class="form-control auth-input" placeholder="Enter your full name" autocomplete="name" />
+                        <span asp-validation-for="FullName" class="field-error"></span>
+                    </div>
+
+                    <div class="field-group">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" class="form-control auth-input" placeholder="you@example.com" autocomplete="email" />
+                        <span asp-validation-for="Email" class="field-error"></span>
+                    </div>
+
+                    <div class="field-group">
+                        <label asp-for="Role"></label>
+                        <select asp-for="Role" class="form-select auth-input">
+                            <option value="Candidate">Candidate — Find opportunities</option>
+                            <option value="Recruiter">Recruiter — Hire talent</option>
+                        </select>
+                        <span asp-validation-for="Role" class="field-error"></span>
+                    </div>
+
+                    <div class="field-group">
+                        <label asp-for="Password"></label>
+                        <input asp-for="Password" class="form-control auth-input" placeholder="At least 8 characters" autocomplete="new-password" />
+                        <span asp-validation-for="Password" class="field-error"></span>
+                    </div>
+
+                    <div class="field-group">
+                        <label asp-for="ConfirmPassword"></label>
+                        <input asp-for="ConfirmPassword" class="form-control auth-input" placeholder="Enter password again" autocomplete="new-password" />
+                        <span asp-validation-for="ConfirmPassword" class="field-error"></span>
+                    </div>
+
+                    <button type="submit" class="btn auth-submit">Create account <span>→</span></button>
+                </form>
+
+                <p class="auth-switch">
+                    Already registered?
+                    <a asp-controller="Account" asp-action="Login">Sign in</a>
+                </p>
+
+                <a class="back-home" asp-controller="Home" asp-action="Index">← Back to home</a>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>

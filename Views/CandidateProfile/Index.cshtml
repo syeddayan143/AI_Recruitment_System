@@ -1,0 +1,538 @@
+﻿@model AIRecruitmentSystem.Models.CandidateProfile
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<style>
+    :root {
+        --profile-bg: #0a0e18;
+        --profile-card: #131a28;
+        --profile-card-light: #192233;
+        --profile-border: rgba(255, 255, 255, 0.10);
+        --profile-text: #f4f6ff;
+        --profile-muted: #a3aec3;
+        --profile-accent: #8baaff;
+        --profile-purple: #9a8cff;
+    }
+
+    body {
+        background: var(--profile-bg) !important;
+        color: var(--profile-text);
+    }
+
+    .profile-page {
+        position: relative;
+        isolation: isolate;
+        min-height: 100vh;
+        overflow: hidden;
+        padding: 48px 16px 70px;
+        background: radial-gradient(ellipse at 10% 5%, rgba(92, 86, 220, .19), transparent 36%), radial-gradient(ellipse at 95% 65%, rgba(36, 130, 190, .12), transparent 35%), var(--profile-bg);
+    }
+
+    .profile-shell {
+        max-width: 1000px;
+        margin: 0 auto;
+        animation: profileEnter .65s ease both;
+    }
+
+    .profile-topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-bottom: 28px;
+    }
+
+    .profile-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: var(--profile-text);
+        font-weight: 800;
+        letter-spacing: -.3px;
+    }
+
+    .profile-brand-icon {
+        display: grid;
+        place-items: center;
+        width: 42px;
+        height: 42px;
+        border-radius: 13px;
+        color: white;
+        font-size: 20px;
+        background: linear-gradient(135deg, #7767f6, #418edc);
+        box-shadow: 0 8px 25px rgba(100, 100, 240, .25);
+    }
+
+    .profile-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 15px;
+        border: 1px solid var(--profile-border);
+        border-radius: 12px;
+        color: #d9e2f7;
+        background: rgba(255, 255, 255, .035);
+        text-decoration: none;
+        transition: .2s ease;
+    }
+
+        .profile-back:hover {
+            color: white;
+            border-color: rgba(139, 170, 255, .6);
+            background: rgba(139, 170, 255, .1);
+            transform: translateY(-2px);
+        }
+
+    .profile-card {
+        overflow: hidden;
+        border: 1px solid var(--profile-border);
+        border-radius: 25px;
+        background: linear-gradient(145deg, rgba(24, 32, 48, .97), rgba(15, 21, 33, .98));
+        box-shadow: 0 25px 80px rgba(0, 0, 0, .28);
+    }
+
+    .profile-heading {
+        position: relative;
+        padding: 36px 38px 30px;
+        border-bottom: 1px solid var(--profile-border);
+        background: radial-gradient(ellipse at 100% 0%, rgba(119, 103, 246, .17), transparent 50%);
+    }
+
+    .profile-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 14px;
+        color: var(--profile-purple);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    .profile-heading h1 {
+        margin: 0 0 12px;
+        color: var(--profile-text);
+        font-size: clamp(30px, 4vw, 42px);
+        font-weight: 850;
+        letter-spacing: -1.5px;
+    }
+
+    .profile-heading p {
+        max-width: 650px;
+        margin: 0;
+        color: var(--profile-muted);
+        line-height: 1.8;
+    }
+
+    .profile-form {
+        padding: 34px 38px 38px;
+    }
+
+    .profile-section-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0 0 22px;
+        color: #eaf0ff;
+        font-size: 17px;
+        font-weight: 750;
+    }
+
+        .profile-section-title::before {
+            content: "";
+            width: 4px;
+            height: 22px;
+            border-radius: 5px;
+            background: linear-gradient(180deg, #9b8cff, #64b6ff);
+        }
+
+    .profile-field {
+        margin-bottom: 23px;
+    }
+
+    .profile-form .form-label {
+        display: block;
+        margin-bottom: 9px;
+        color: #e0e7f6;
+        font-size: 13px;
+        font-weight: 650;
+    }
+
+    .profile-form .form-control {
+        min-height: 49px;
+        padding: 12px 15px;
+        border: 1px solid rgba(255, 255, 255, .12);
+        border-radius: 12px;
+        color: #f4f6ff;
+        background-color: #0e1421;
+        box-shadow: none;
+        transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
+    }
+
+    .profile-form textarea.form-control {
+        min-height: 125px;
+        resize: vertical;
+        line-height: 1.7;
+    }
+
+    .profile-form .form-control::placeholder {
+        color: #758199;
+        opacity: 1;
+    }
+
+    .profile-form .form-control:focus {
+        border-color: #8b9cff;
+        background-color: #111a2a;
+        box-shadow: 0 0 0 4px rgba(139, 156, 255, .12);
+    }
+
+    .profile-help {
+        display: block;
+        margin-top: 8px;
+        color: #8794aa;
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .profile-form .text-danger {
+        display: block;
+        margin-top: 7px;
+        font-size: 12px;
+    }
+
+    .profile-validation {
+        padding: 13px 16px;
+        border: 1px solid rgba(255, 105, 125, .25);
+        border-radius: 12px;
+        color: #ffabb8;
+        background: rgba(255, 105, 125, .08);
+    }
+
+    .profile-success {
+        padding: 14px 16px;
+        border: 1px solid rgba(77, 220, 165, .25);
+        border-radius: 12px;
+        color: #91f0ca;
+        background: rgba(77, 220, 165, .09);
+    }
+
+    .profile-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding-top: 25px;
+        border-top: 1px solid var(--profile-border);
+    }
+
+    .profile-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        min-height: 47px;
+        padding: 12px 21px;
+        border: 1px solid transparent;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 750;
+        text-decoration: none;
+        cursor: pointer;
+        transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+        .profile-btn:hover {
+            transform: translateY(-2px);
+        }
+
+    .profile-btn-primary {
+        color: #fff;
+        background: linear-gradient(135deg, #7868f6, #477fe7);
+        box-shadow: 0 8px 22px rgba(95, 104, 235, .2);
+    }
+
+        .profile-btn-primary:hover {
+            color: #fff;
+            box-shadow: 0 12px 28px rgba(95, 104, 235, .32);
+        }
+
+    .profile-btn-secondary {
+        border-color: var(--profile-border);
+        color: #d7e0f3;
+        background: rgba(255, 255, 255, .035);
+    }
+
+        .profile-btn-secondary:hover {
+            border-color: rgba(255, 255, 255, .25);
+            color: #fff;
+            background: rgba(255, 255, 255, .075);
+        }
+
+    .profile-footer-note {
+        margin-top: 19px;
+        color: #77849b;
+        font-size: 12px;
+        line-height: 1.7;
+        text-align: center;
+    }
+
+    @@keyframes profileEnter {
+        from {
+            opacity: 0;
+            transform: translateY(16px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@media (max-width: 650px) {
+        .profile-page {
+            padding: 25px 12px 45px;
+        }
+
+        .profile-heading {
+            padding: 26px 22px;
+        }
+
+        .profile-form {
+            padding: 25px 22px;
+        }
+
+        .profile-heading h1 {
+            letter-spacing: -1px;
+        }
+
+        .profile-actions {
+            flex-direction: column;
+        }
+
+        .profile-btn {
+            width: 100%;
+        }
+    }
+
+    @@media (prefers-reduced-motion: reduce) {
+        .profile-shell {
+            animation: none;
+        }
+
+        .profile-back,
+        .profile-btn {
+            transition: none;
+        }
+    }
+</style>
+
+<div class="profile-page">
+    <div class="profile-shell">
+
+        <header class="profile-topbar">
+            <div class="profile-brand">
+                <span class="profile-brand-icon">✦</span>
+                <span>AI Recruitment System</span>
+            </div>
+
+            <a asp-controller="CandidateDashboard"
+               asp-action="Index"
+               class="profile-back">
+                <span aria-hidden="true">←</span>
+                Back to Dashboard
+            </a>
+        </header>
+
+        <main class="profile-card">
+            <section class="profile-heading">
+                <div class="profile-eyebrow">
+                    <span>✦</span>
+                    Candidate workspace
+                </div>
+
+                <h1>My Candidate Profile</h1>
+
+                <p>
+                    Showcase your experience, education and technical
+                    skills to help recruiters understand your strengths
+                    and discover suitable opportunities.
+                </p>
+            </section>
+
+            <div class="profile-form">
+
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="profile-success mb-4" role="status">
+                        <strong>✓ Profile saved</strong>
+                        <div class="mt-1">
+                            @TempData["SuccessMessage"]
+                        </div>
+                    </div>
+                }
+
+                <div asp-validation-summary="ModelOnly"
+                     class="profile-validation mb-4"></div>
+
+                <form asp-action="Index" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <h2 class="profile-section-title">
+                        Professional information
+                    </h2>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="profile-field">
+                                <label asp-for="CurrentJobTitle"
+                                       class="form-label">
+                                    Current Job Title
+                                </label>
+
+                                <input asp-for="CurrentJobTitle"
+                                       class="form-control"
+                                       placeholder="e.g. .NET Developer" />
+
+                                <span asp-validation-for="CurrentJobTitle"
+                                      class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="profile-field">
+                                <label asp-for="HighestEducation"
+                                       class="form-label">
+                                    Highest Education
+                                </label>
+
+                                <input asp-for="HighestEducation"
+                                       class="form-control"
+                                       placeholder="e.g. B.Sc Computer Science" />
+
+                                <span asp-validation-for="HighestEducation"
+                                      class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="profile-field">
+                                <label asp-for="ExperienceYears"
+                                       class="form-label">
+                                    Experience (Years)
+                                </label>
+
+                                <input asp-for="ExperienceYears"
+                                       type="number"
+                                       min="0"
+                                       max="60"
+                                       class="form-control" />
+
+                                <span asp-validation-for="ExperienceYears"
+                                      class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="profile-field">
+                                <label asp-for="PreferredLocation"
+                                       class="form-label">
+                                    Preferred Location
+                                </label>
+
+                                <input asp-for="PreferredLocation"
+                                       class="form-control"
+                                       placeholder="e.g. Pune, Maharashtra" />
+
+                                <span asp-validation-for="PreferredLocation"
+                                      class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="profile-section-title mt-3">
+                        Skills and expertise
+                    </h2>
+
+                    <div class="profile-field">
+                        <label asp-for="Skills" class="form-label">
+                            Technical Skills
+                        </label>
+
+                        <textarea asp-for="Skills"
+                                  class="form-control"
+                                  rows="4"
+                                  placeholder="C#, ASP.NET Core MVC, SQL Server, HTML, CSS..."></textarea>
+
+                        <small class="profile-help">
+                            Separate skills with commas. For example:
+                            C#, ASP.NET Core MVC, SQL Server, JavaScript.
+                        </small>
+
+                        <span asp-validation-for="Skills"
+                              class="text-danger"></span>
+                    </div>
+
+                    <h2 class="profile-section-title mt-4">
+                        Online presence
+                    </h2>
+
+                    <div class="profile-field">
+                        <label asp-for="LinkedInUrl"
+                               class="form-label">
+                            LinkedIn Profile URL
+                        </label>
+
+                        <input asp-for="LinkedInUrl"
+                               type="url"
+                               class="form-control"
+                               placeholder="https://www.linkedin.com/in/..." />
+
+                        <span asp-validation-for="LinkedInUrl"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="profile-field mb-4">
+                        <label asp-for="PortfolioUrl"
+                               class="form-label">
+                            Portfolio URL
+                        </label>
+
+                        <input asp-for="PortfolioUrl"
+                               type="url"
+                               class="form-control"
+                               placeholder="https://yourportfolio.com" />
+
+                        <span asp-validation-for="PortfolioUrl"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="profile-actions">
+                        <button type="submit"
+                                class="profile-btn profile-btn-primary">
+                            <span aria-hidden="true">✓</span>
+                            Save Profile
+                        </button>
+
+                        <a asp-controller="CandidateDashboard"
+                           asp-action="Index"
+                           class="profile-btn profile-btn-secondary">
+                            ← Back to Dashboard
+                        </a>
+                    </div>
+                </form>
+
+                <div class="profile-footer-note">
+                    Keep your skills and professional information up to date
+                    for more relevant job matches.
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

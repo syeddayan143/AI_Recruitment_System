@@ -1,0 +1,634 @@
+﻿@model IEnumerable<AIRecruitmentSystem.Models.Resume>
+
+@{
+    ViewData["Title"] = "My Resumes";
+    var resumes = Model?.ToList() ?? new List<AIRecruitmentSystem.Models.Resume>();
+}
+
+<style>
+    :root {
+        --resume-bg: #0a0e18;
+        --resume-card: #141b29;
+        --resume-border: rgba(255,255,255,.10);
+        --resume-text: #f4f6ff;
+        --resume-muted: #a3aec3;
+        --resume-blue: #8bb0ff;
+        --resume-purple: #a295ff;
+    }
+
+    body {
+        background: var(--resume-bg) !important;
+        color: var(--resume-text);
+    }
+
+    .resume-page {
+        min-height: 100vh;
+        padding: 42px 16px 70px;
+        background: radial-gradient(ellipse at 10% 0%, rgba(94,82,220,.19), transparent 38%), radial-gradient(ellipse at 100% 65%, rgba(40,125,190,.12), transparent 35%), var(--resume-bg);
+    }
+
+    .resume-shell {
+        max-width: 1100px;
+        margin: auto;
+        animation: resumeEnter .6s ease both;
+    }
+
+    .resume-topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-bottom: 38px;
+    }
+
+    .resume-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: var(--resume-text);
+        font-weight: 800;
+    }
+
+    .resume-brand-icon, .resume-empty-icon, .resume-file-icon {
+        display: grid;
+        place-items: center;
+        color: white;
+        background: linear-gradient(135deg, #7969f6, #438de5);
+    }
+
+    .resume-brand-icon {
+        width: 43px;
+        height: 43px;
+        border-radius: 14px;
+        font-size: 21px;
+    }
+
+    .resume-back, .resume-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 11px 16px;
+        border: 1px solid var(--resume-border);
+        border-radius: 11px;
+        color: #d9e3f8;
+        background: rgba(255,255,255,.035);
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 750;
+        cursor: pointer;
+        transition: .2s ease;
+    }
+
+        .resume-back:hover, .resume-btn:hover {
+            color: white;
+            transform: translateY(-2px);
+        }
+
+    .resume-eyebrow {
+        color: var(--resume-purple);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    .resume-heading {
+        margin-bottom: 30px;
+    }
+
+        .resume-heading h1 {
+            margin: 12px 0;
+            color: var(--resume-text);
+            font-size: clamp(32px, 5vw, 45px);
+            font-weight: 850;
+            letter-spacing: -1.4px;
+        }
+
+        .resume-heading p, .resume-muted {
+            color: var(--resume-muted);
+            line-height: 1.8;
+        }
+
+    .resume-panel {
+        overflow: hidden;
+        margin-bottom: 24px;
+        border: 1px solid var(--resume-border);
+        border-radius: 22px;
+        background: linear-gradient(145deg, rgba(24,32,48,.97), rgba(15,21,33,.98));
+        box-shadow: 0 18px 55px rgba(0,0,0,.18);
+    }
+
+    .resume-panel-header {
+        padding: 23px 28px;
+        border-bottom: 1px solid var(--resume-border);
+    }
+
+        .resume-panel-header h2 {
+            margin: 0;
+            color: var(--resume-text);
+            font-size: 19px;
+            font-weight: 800;
+        }
+
+        .resume-panel-header p {
+            margin: 7px 0 0;
+            color: var(--resume-muted);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+    .resume-panel-body {
+        padding: 28px;
+    }
+
+    .resume-upload-zone {
+        padding: 30px 22px;
+        border: 1px dashed rgba(139,176,255,.38);
+        border-radius: 17px;
+        background: rgba(139,176,255,.045);
+    }
+
+    .resume-file-icon {
+        width: 55px;
+        height: 55px;
+        margin-bottom: 17px;
+        border-radius: 16px;
+        font-size: 25px;
+    }
+
+    .resume-upload-title {
+        margin-bottom: 8px;
+        color: #edf1ff;
+        font-size: 16px;
+        font-weight: 750;
+    }
+
+    .resume-page .form-label {
+        color: #e3eaf8;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .resume-page input[type="file"] {
+        width: 100%;
+        min-height: 49px;
+        padding: 7px;
+        border: 1px solid rgba(255,255,255,.12);
+        border-radius: 12px;
+        color: #c7d2e7;
+        background: #0e1421;
+    }
+
+        .resume-page input[type="file"]::file-selector-button {
+            margin-right: 13px;
+            padding: 9px 14px;
+            border: 0;
+            border-radius: 8px;
+            color: #f2f5ff;
+            background: #28354c;
+            cursor: pointer;
+        }
+
+    .resume-btn-primary {
+        border-color: transparent;
+        color: white;
+        background: linear-gradient(135deg, #7968f4, #477fe7);
+    }
+
+    .resume-btn-outline {
+        border-color: rgba(139,176,255,.3);
+        color: #b9d0ff;
+        background: rgba(139,176,255,.07);
+    }
+
+    .resume-btn-ai {
+        border-color: rgba(162,149,255,.38);
+        color: #e0d9ff;
+        background: linear-gradient(135deg, rgba(121,104,244,.20), rgba(71,127,231,.16));
+    }
+
+    .resume-btn-danger {
+        border-color: rgba(255,120,140,.25);
+        color: #ffabb8;
+        background: rgba(255,120,140,.06);
+    }
+
+    .resume-alert {
+        padding: 15px 18px;
+        margin-bottom: 22px;
+        border: 1px solid var(--resume-border);
+        border-radius: 13px;
+        line-height: 1.6;
+    }
+
+    .resume-alert-success {
+        color: #8ee9c3;
+        border-color: rgba(77,220,165,.23);
+        background: rgba(77,220,165,.08);
+    }
+
+    .resume-alert-error {
+        color: #ffb2be;
+        border-color: rgba(255,105,125,.25);
+        background: rgba(255,105,125,.08);
+    }
+
+    .resume-count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 31px;
+        height: 29px;
+        padding: 0 9px;
+        margin-left: 8px;
+        border-radius: 9px;
+        color: #c4d3ff;
+        background: rgba(139,156,255,.13);
+        font-size: 12px;
+    }
+
+    .resume-item {
+        padding: 23px;
+        margin-bottom: 16px;
+        border: 1px solid var(--resume-border);
+        border-radius: 17px;
+        background: rgba(255,255,255,.025);
+        transition: .22s ease;
+    }
+
+        .resume-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .resume-item:hover {
+            transform: translateY(-2px);
+            border-color: rgba(139,156,255,.28);
+            background: rgba(255,255,255,.04);
+        }
+
+    .resume-file-name {
+        overflow-wrap: anywhere;
+        margin: 0 0 8px;
+        color: #f0f3ff;
+        font-size: 16px;
+        font-weight: 750;
+    }
+
+    .resume-meta {
+        color: #8e9bb2;
+        font-size: 12px;
+        line-height: 1.8;
+    }
+
+    .resume-actions {
+        display: flex;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 9px;
+    }
+
+        .resume-actions form {
+            margin: 0;
+        }
+
+    .resume-divider {
+        height: 1px;
+        margin: 21px 0;
+        border: 0;
+        background: var(--resume-border);
+    }
+
+    .resume-skills-heading {
+        margin-bottom: 12px;
+        color: #e5ebfb;
+        font-size: 13px;
+        font-weight: 750;
+    }
+
+    .resume-skill {
+        display: inline-flex;
+        align-items: center;
+        padding: 7px 11px;
+        border: 1px solid rgba(139,156,255,.22);
+        border-radius: 30px;
+        color: #c9d4ff;
+        background: rgba(139,156,255,.09);
+        font-size: 12px;
+        font-weight: 650;
+    }
+
+    .resume-empty {
+        padding: 38px 20px;
+        text-align: center;
+        border: 1px dashed rgba(255,255,255,.14);
+        border-radius: 16px;
+        background: rgba(255,255,255,.02);
+    }
+
+    .resume-empty-icon {
+        width: 58px;
+        height: 58px;
+        margin: 0 auto 17px;
+        border-radius: 18px;
+        font-size: 26px;
+    }
+
+    .resume-empty h3 {
+        color: #edf1ff;
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    .resume-footer {
+        margin-top: 25px;
+        color: #77849b;
+        font-size: 12px;
+        line-height: 1.7;
+        text-align: center;
+    }
+
+    @@keyframes resumeEnter {
+        from {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@media (max-width: 650px) {
+        .resume-page {
+            padding: 25px 12px 45px;
+        }
+
+        .resume-panel-header {
+            padding: 20px;
+        }
+
+        .resume-panel-body {
+            padding: 20px;
+        }
+
+        .resume-item {
+            padding: 18px;
+        }
+
+        .resume-actions {
+            width: 100%;
+        }
+
+            .resume-actions > a, .resume-actions > form {
+                flex: 1 1 auto;
+            }
+
+            .resume-actions .resume-btn {
+                width: 100%;
+            }
+
+        .resume-upload-zone {
+            padding: 22px 16px;
+        }
+    }
+
+    @@media (prefers-reduced-motion: reduce) {
+        .resume-shell {
+            animation: none;
+        }
+
+        .resume-item, .resume-btn, .resume-back {
+            transition: none;
+        }
+    }
+</style>
+
+<div class="resume-page">
+    <div class="resume-shell">
+
+        <header class="resume-topbar">
+            <div class="resume-brand">
+                <span class="resume-brand-icon">✦</span>
+                <span>AI Recruitment System</span>
+            </div>
+
+            <a asp-controller="CandidateDashboard"
+               asp-action="Index"
+               class="resume-back">
+                <span aria-hidden="true">←</span>
+                Back to Dashboard
+            </a>
+        </header>
+
+        <section class="resume-heading">
+            <div class="resume-eyebrow">Candidate workspace</div>
+            <h1>My Resumes</h1>
+            <p>
+                Manage your resumes, extract recognized skills and use AI
+                to review your resume summary, strengths and improvements.
+            </p>
+        </section>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="resume-alert resume-alert-success" role="status">
+                <strong>✓ Success</strong>
+                <div class="mt-1">@TempData["SuccessMessage"]</div>
+            </div>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="resume-alert resume-alert-error" role="alert">
+                <strong>Something went wrong</strong>
+                <div class="mt-1">@TempData["ErrorMessage"]</div>
+            </div>
+        }
+
+        <section class="resume-panel">
+            <div class="resume-panel-header">
+                <h2>Upload New Resume</h2>
+                <p>Supported formats: PDF and DOCX · Maximum size: 5 MB</p>
+            </div>
+
+            <div class="resume-panel-body">
+                <div class="resume-upload-zone">
+                    <div class="resume-file-icon" aria-hidden="true">↑</div>
+
+                    <div class="resume-upload-title">Add your latest resume</div>
+
+                    <p class="resume-muted mb-4">
+                        Choose a readable resume file. Recognized skills
+                        will be extracted after upload.
+                    </p>
+
+                    <form asp-controller="Resume"
+                          asp-action="Upload"
+                          method="post"
+                          enctype="multipart/form-data">
+
+                        @Html.AntiForgeryToken()
+
+                        <div class="mb-4">
+                            <label for="resumeFile" class="form-label">
+                                Choose PDF or DOCX
+                            </label>
+
+                            <input type="file"
+                                   id="resumeFile"
+                                   name="resumeFile"
+                                   accept=".pdf,.docx"
+                                   class="form-control"
+                                   required />
+
+                            <small class="resume-meta d-block mt-2">
+                                Select a file up to 5 MB.
+                            </small>
+                        </div>
+
+                        <button type="submit" class="resume-btn resume-btn-primary">
+                            ↑ Upload Resume
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section class="resume-panel">
+            <div class="resume-panel-header">
+                <h2>
+                    Uploaded Resumes
+                    <span class="resume-count">@resumes.Count</span>
+                </h2>
+                <p>Your uploaded files, detected skills and AI analysis.</p>
+            </div>
+
+            <div class="resume-panel-body">
+                @if (resumes.Any())
+                {
+                    @foreach (var resume in resumes)
+                    {
+                        <article class="resume-item">
+                            <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+                                <div class="flex-grow-1" style="min-width:0">
+                                    <h3 class="resume-file-name">
+                                        @resume.OriginalFileName
+                                    </h3>
+
+                                    <div class="resume-meta">
+                                        @((resume.FileSizeBytes / 1024.0).ToString("N0")) KB
+                                        <span class="mx-1">·</span>
+                                        Uploaded
+                                        @resume.UploadedAt.ToLocalTime().ToString("dd MMM yyyy")
+                                    </div>
+                                </div>
+
+                                <div class="resume-actions">
+                                    <a asp-controller="Resume"
+                                       asp-action="Download"
+                                       asp-route-id="@resume.Id"
+                                       class="resume-btn resume-btn-outline">
+                                        ↓ Download
+                                    </a>
+
+                                    @if (!string.IsNullOrWhiteSpace(resume.ExtractedText))
+                                    {
+                                        <form asp-controller="Resume"
+                                              asp-action="Analyze"
+                                              asp-route-id="@resume.Id"
+                                              method="post">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <button type="submit"
+                                                    class="resume-btn resume-btn-ai">
+                                                ✦ Analyze with AI
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <button type="button"
+                                                class="resume-btn resume-btn-ai"
+                                                disabled
+                                                title="No readable resume text is available">
+                                            AI analysis unavailable
+                                        </button>
+                                    }
+
+                                    <form asp-controller="Resume"
+                                          asp-action="Delete"
+                                          asp-route-id="@resume.Id"
+                                          method="post"
+                                          onsubmit="return confirm('Delete this resume? This action cannot be undone.');">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit"
+                                                class="resume-btn resume-btn-danger">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <hr class="resume-divider" />
+
+                            <h4 class="resume-skills-heading">Detected Skills</h4>
+
+                            @if (!string.IsNullOrWhiteSpace(resume.DetectedSkills))
+                            {
+                                <div class="d-flex flex-wrap gap-2">
+                                    @foreach (var skill in resume.DetectedSkills.Split(
+                                                            ',',
+                                                            StringSplitOptions.RemoveEmptyEntries |
+                                                            StringSplitOptions.TrimEntries))
+                                    {
+                                        <span class="resume-skill">@skill</span>
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="resume-meta mb-0">
+                                    No recognized skills were detected by the current skill list.
+                                </p>
+                            }
+
+                            <p class="resume-meta mt-3 mb-0">
+                                When you select Analyze with AI, the extracted resume text
+                                is sent to Groq for analysis. Avoid sending confidential
+                                information unless you have permission to do so.
+                            </p>
+                        </article>
+                    }
+                }
+                else
+                {
+                    <div class="resume-empty">
+                        <div class="resume-empty-icon" aria-hidden="true">▤</div>
+                        <h3>No resumes uploaded yet</h3>
+                        <p class="resume-muted mb-0">
+                            Upload your first resume to get started.
+                        </p>
+                    </div>
+                }
+            </div>
+        </section>
+
+        <div class="text-center">
+            <a asp-controller="CandidateDashboard"
+               asp-action="Index"
+               class="resume-btn resume-btn-outline">
+                ← Back to Dashboard
+            </a>
+        </div>
+
+        <div class="resume-footer">
+            AI-generated suggestions may be inaccurate. Review them before using them.
+        </div>
+    </div>
+</div>

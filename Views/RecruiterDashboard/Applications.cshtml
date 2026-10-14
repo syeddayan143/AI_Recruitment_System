@@ -1,0 +1,197 @@
+﻿@model IEnumerable<AIRecruitmentSystem.Models.JobApplication>
+
+@{
+    ViewData["Title"] = "Candidate Applications";
+}
+
+<style>
+    .applications-page {
+        max-width: 1250px;
+        margin: 30px auto;
+        color: #e5e7eb;
+    }
+
+    .applications-card {
+        background: #151c2b;
+        border: 1px solid #2b364a;
+        border-radius: 16px;
+        padding: 24px;
+    }
+
+    .applications-title {
+        color: #fff;
+        font-weight: 700;
+    }
+
+    .applications-muted {
+        color: #a8b4c8;
+    }
+
+    .applications-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 850px;
+    }
+
+        .applications-table th,
+        .applications-table td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #2b364a;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        .applications-table th {
+            color: #bfdbfe;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+
+        .applications-table td {
+            color: #e5e7eb;
+        }
+
+        .applications-table tbody tr:hover {
+            background: #1c2638;
+        }
+
+    .application-status {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 20px;
+        background: #243b59;
+        color: #bfdbfe;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .application-action {
+        display: inline-block;
+        background: #3b82f6;
+        color: white;
+        text-decoration: none;
+        padding: 8px 13px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+        .application-action:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+    .applications-empty {
+        text-align: center;
+        padding: 45px 15px;
+        color: #a8b4c8;
+    }
+
+    .applications-table-wrap {
+        overflow-x: auto;
+    }
+</style>
+
+<div class="container applications-page">
+
+    <div class="mb-4">
+        <a asp-controller="RecruiterDashboard"
+           asp-action="Index"
+           class="text-decoration-none">
+            &larr; Back to Dashboard
+        </a>
+
+        <h2 class="applications-title mt-3">Candidate Applications</h2>
+
+        <p class="applications-muted">
+            Review candidates who have applied to your job openings.
+        </p>
+    </div>
+
+    <div class="applications-card">
+
+        @if (Model.Any())
+        {
+            <div class="applications-table-wrap">
+                <table class="applications-table">
+                    <thead>
+                        <tr>
+                            <th>Candidate</th>
+                            <th>Job Position</th>
+                            <th>Email</th>
+                            <th>Applied On</th>
+                            <th>AI Match</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var application in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <strong>
+                                        @(application.Candidate?.FullName
+                                                                        ?? "Candidate")
+                            </strong>
+                        </td>
+
+                                <td>
+                                    @(application.Job?.Title ?? "Job unavailable")
+                                </td>
+
+                                <td>
+                                    @(application.Candidate?.Email ?? "Not available")
+                                </td>
+
+                                <td>
+                                    @application.AppliedAt.ToLocalTime().ToString("dd MMM yyyy")
+                                </td>
+
+                                <td>
+                            @if (application.MatchScore.HasValue)
+                                    {
+                                        <strong>
+                                            @application.MatchScore.Value.ToString("0")%
+                                        </strong>
+                                    }
+                                    else
+                                    {
+                                        <span class="applications-muted">N/A</span>
+                                    }
+                                </td>
+
+                                <td>
+                                    <span class="application-status">
+                                        @application.Status
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <a asp-controller="RecruiterDashboard"
+                                       asp-action="Details"
+                                       asp-route-id="@application.Id"
+                                       class="application-action">
+                                        View Details
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="applications-empty">
+                <h4>No applications yet</h4>
+                <p>
+                    Applications for your published jobs will appear here.
+                </p>
+            </div>
+        }
+
+    </div>
+</div>

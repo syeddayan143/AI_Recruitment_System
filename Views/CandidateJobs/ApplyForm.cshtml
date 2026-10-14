@@ -1,0 +1,321 @@
+﻿@model AIRecruitmentSystem.ViewModels.JobApplicationFormViewModel
+
+@{
+    ViewData["Title"] = "Apply for Job";
+}
+
+<style>
+    .application-page {
+        max-width: 1050px;
+        margin: 30px auto;
+        color: #f1f5f9;
+    }
+
+    .application-card {
+        background: #151c2b;
+        border: 1px solid #2b364a;
+        border-radius: 18px;
+        padding: 28px;
+        margin-bottom: 22px;
+    }
+
+    .application-heading {
+        color: #ffffff;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .application-muted {
+        color: #a8b4c8;
+    }
+
+    .application-page .form-label {
+        color: #dce5f4;
+        font-weight: 600;
+    }
+
+    .application-page .form-control,
+    .application-page .form-select {
+        background: #0e1523;
+        color: #f8fafc;
+        border: 1px solid #39465d;
+        border-radius: 9px;
+        padding: 11px 13px;
+    }
+
+        .application-page .form-control:focus,
+        .application-page .form-select:focus {
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, .15);
+        }
+
+        .application-page .form-control::placeholder {
+            color: #8492a8;
+        }
+
+        .application-page .form-select option {
+            background: #0e1523;
+            color: #f8fafc;
+        }
+
+    .job-description {
+        white-space: pre-line;
+        line-height: 1.8;
+        color: #cbd5e1;
+        overflow-wrap: anywhere;
+    }
+
+    .application-btn {
+        background: #3b82f6;
+        color: white;
+        border: 0;
+        border-radius: 10px;
+        padding: 12px 24px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+        .application-btn:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+    .application-back {
+        color: #bfdbfe;
+        text-decoration: none;
+    }
+
+        .application-back:hover {
+            color: white;
+        }
+
+    .application-page .text-danger,
+    .validation-summary-errors,
+    .field-validation-error {
+        color: #fca5a5 !important;
+        font-size: 0.9rem;
+    }
+
+        .validation-summary-errors ul {
+            margin-bottom: 0;
+        }
+
+    .application-page hr {
+        border-color: #39465d;
+        margin: 22px 0;
+    }
+
+    @@media (max-width: 576px) {
+        .application-page {
+            margin: 16px auto;
+        }
+
+        .application-card {
+            padding: 18px;
+            border-radius: 14px;
+        }
+
+        .application-btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="container application-page">
+
+    <div class="mb-4">
+        <a asp-action="Index" class="application-back">
+            &larr; Back to Jobs
+        </a>
+
+        <h2 class="application-heading mt-3">Job Application</h2>
+
+        <p class="application-muted">
+            Review the job details and your profile before submitting.
+        </p>
+    </div>
+
+    <div asp-validation-summary="ModelOnly" class="mb-3"></div>
+
+    <form asp-controller="CandidateJobs"
+          asp-action="SubmitApplication"
+          method="post">
+
+        @Html.AntiForgeryToken()
+
+        <input asp-for="JobId" type="hidden" />
+
+        <!-- Job Details -->
+        <div class="application-card">
+            <h4 class="application-heading">@Model.JobTitle</h4>
+
+            <p class="application-muted mb-2">
+                @Model.Department · @Model.JobLocation
+            </p>
+
+            <p class="application-muted mb-2">
+                Recruiter: @Model.CompanyOrRecruiter
+            </p>
+
+            <p class="application-muted mb-3">
+                @Model.EmploymentType
+            </p>
+
+            @if (Model.MinimumSalary.HasValue || Model.MaximumSalary.HasValue)
+            {
+                <p>
+                    <strong>Salary:</strong>
+
+                    <span>
+                        @(Model.MinimumSalary.HasValue
+                                            ? Model.MinimumSalary.Value.ToString("N0")
+                                            : "Not specified")
+                                                          </span>
+
+                    <span> - </span>
+
+                    <span>
+                        @(Model.MaximumSalary.HasValue
+                                            ? Model.MaximumSalary.Value.ToString("N0")
+                                            : "Not specified")
+                </span>
+            </p>
+                        }
+
+            <hr />
+
+            <h5 class="application-heading">Job Description</h5>
+
+            <div class="job-description">@Model.JobDescription</div>
+        </div>
+
+        <!-- Personal Information -->
+        <div class="application-card">
+            <h4 class="application-heading">Personal Information</h4>
+
+            <p class="application-muted">
+                Check your details carefully before submitting.
+                Your name and phone number will be saved to your account.
+            </p>
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    <label asp-for="FullName" class="form-label"></label>
+                    <input asp-for="FullName" class="form-control" />
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" readonly />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="PhoneNumber" class="form-label"></label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="CurrentJobTitle" class="form-label"></label>
+                    <input asp-for="CurrentJobTitle" class="form-control" />
+                    <span asp-validation-for="CurrentJobTitle" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="HighestEducation" class="form-label"></label>
+                    <input asp-for="HighestEducation" class="form-control" />
+                    <span asp-validation-for="HighestEducation" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="ExperienceYears" class="form-label"></label>
+                    <input asp-for="ExperienceYears"
+                           type="number"
+                           min="0"
+                           max="60"
+                           class="form-control" />
+                    <span asp-validation-for="ExperienceYears" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="PreferredLocation" class="form-label"></label>
+                    <input asp-for="PreferredLocation" class="form-control" />
+                    <span asp-validation-for="PreferredLocation" class="text-danger"></span>
+                </div>
+
+                <div class="col-12">
+                    <label asp-for="Skills" class="form-label"></label>
+                    <textarea asp-for="Skills"
+                              class="form-control"
+                              rows="3"
+                              placeholder="Example: ASP.NET Core MVC, SQL Server, C#, HTML, CSS"></textarea>
+                    <span asp-validation-for="Skills" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="LinkedInUrl" class="form-label"></label>
+                    <input asp-for="LinkedInUrl"
+                           class="form-control"
+                           placeholder="https://linkedin.com/in/..." />
+                    <span asp-validation-for="LinkedInUrl" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="PortfolioUrl" class="form-label"></label>
+                    <input asp-for="PortfolioUrl"
+                           class="form-control"
+                           placeholder="https://yourportfolio.com" />
+                    <span asp-validation-for="PortfolioUrl" class="text-danger"></span>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Resume Selection -->
+        <div class="application-card">
+            <h4 class="application-heading">Select Resume</h4>
+
+            <p class="application-muted">
+                Choose the resume you want to send to this recruiter.
+            </p>
+
+            <label asp-for="ResumeId" class="form-label"></label>
+
+            <select asp-for="ResumeId" class="form-select">
+                <option value="">-- Select your resume --</option>
+
+                @foreach (var resume in Model.Resumes)
+                {
+                    <option value="@resume.Id">
+                        @resume.FileName
+                        (Uploaded @resume.UploadedAt.ToLocalTime().ToString("dd MMM yyyy"))
+                    </option>
+                }
+            </select>
+
+            <span asp-validation-for="ResumeId" class="text-danger"></span>
+        </div>
+
+        <!-- Actions -->
+        <div class="d-flex flex-wrap gap-3 mb-5">
+
+            <button type="submit" class="application-btn">
+                Submit Application
+            </button>
+
+            <a asp-action="Index"
+               class="btn btn-outline-secondary rounded-3 px-4">
+                Cancel
+            </a>
+
+        </div>
+
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
